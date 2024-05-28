@@ -1,21 +1,28 @@
 import React, { useState } from "react";
-import Question from "./Question";
-import quiz from "../data/quiz";
+import QuizQuestion from "./QuizQuestion";
+import quizData from "../data/quiz";
 
-function App() {
-  const [questions, setQuestions] = useState(quiz);
-  const [currentQuestionId, setCurrentQuestion] = useState(1);
+function QuizApp() {
+  // State for managing questions, current question ID, and score
+  const [questions, setQuestions] = useState(quizData);
+  const [currentQuestionId, setCurrentQuestionId] = useState(1);
   const [score, setScore] = useState(0);
+
+  // Find the current question
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
 
+  // Handler for when a question is answered
   function handleQuestionAnswered(correct) {
+    // Move to the next question or end the game
     if (currentQuestionId < questions.length) {
-      setCurrentQuestion((currentQuestionId) => currentQuestionId + 1);
+      setCurrentQuestionId((prevId) => prevId + 1);
     } else {
-      setCurrentQuestion(null);
+      setCurrentQuestionId(null);
     }
+
+    // Update score if the answer is correct
     if (correct) {
-      setScore((score) => score + 1);
+      setScore((prevScore) => prevScore + 1);
     }
   }
 
@@ -23,9 +30,9 @@ function App() {
     <main>
       <section>
         {currentQuestion ? (
-          <Question
-            question={currentQuestion}
-            onAnswered={handleQuestionAnswered}
+          <QuizQuestion
+            questionData={currentQuestion}
+            onQuestionAnswered={handleQuestionAnswered}
           />
         ) : (
           <>
@@ -38,4 +45,4 @@ function App() {
   );
 }
 
-export default App;
+export default QuizApp;
